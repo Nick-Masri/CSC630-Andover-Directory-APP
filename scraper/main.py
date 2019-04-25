@@ -6,13 +6,6 @@ pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
 
 text = ""
 
-# # Faculty
-# for i in range(31, 145): # Get only the pages with directory cards
-#     page = pdfReader.getPage(i)
-#     text += page.extractText()
-#
-# text += "\n\n**************\n\n"
-
 # Students
 for i in range(145, 241): # Get only the pages with directory cards
     page = pdfReader.getPage(i)
