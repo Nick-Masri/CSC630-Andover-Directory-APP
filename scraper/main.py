@@ -1,5 +1,6 @@
 import PyPDF2
 import re
+import json
 
 pdfFileObj = open('directory.pdf', 'rb')
 pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
@@ -72,8 +73,7 @@ def extract_student_data(student):
     }
 
 for i in range(0, len(text) - 1, 2):
-    students.append((text[i] + " " + text[i + 1]).strip())
+    students.append(extract_student_data((text[i] + " " + text[i + 1]).strip()))
 
-for student in students:
-    # print(student)
-    print(extract_student_data(student))
+with open('directory.json', 'w') as outfile:
+    json.dump(students, outfile)
