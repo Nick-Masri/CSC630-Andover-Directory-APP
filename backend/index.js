@@ -1,5 +1,18 @@
 var express = require("express");
 var app = express();
+var knex = require('knex')({
+  client: 'pg',
+  // version: '7.2',
+  connection: {
+    host : '127.0.0.1',
+    // user : 'your_database_user',
+    // password : 'your_database_password',
+    database : 'pa_directory'
+  }
+});
+
+// Initialize Database
+require("./app/db.js").initialize(knex);
 
 app.get("/people", function(req, res){
   if("dorms" in req.query); //comma-separated list of dorms
