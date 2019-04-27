@@ -1,3 +1,5 @@
+var fs = require("fs");
+
 module.exports = {
   /*
     Creates both tables in the database
@@ -29,5 +31,27 @@ module.exports = {
         console.log("Successfully created 'people' table");
       });
     });
+  },
+
+  /*
+    Automatically populates the 'people' database with all Andover students.
+    Though this data is static (will never be updated/changed by users or admins), it is more convenient to have it in db form for filtering purposes.
+  */
+  populate: function(knex){
+    knex.from("people")
+      .select("id")
+      .then(function(result){
+        //Only populate if the database is empty
+        if(!result.length){
+          var rows = JSON.parse(fs.readFileSync("./app/scraper/directory.json"));
+          knex.batchInsert('people', rows)
+            .then(function(){
+              console.log("Successfully inserted rows");
+            })
+            .catch(function(e){
+              console.log(e);
+            });
+        }
+      });
   }
 };
