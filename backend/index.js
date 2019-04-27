@@ -30,7 +30,7 @@ app.get("/people", function(req, res){
 
       if("grades" in req.query) queryBuilder.whereIn('grade', req.query.grades.split(","));
 
-      if("search" in req.query) queryBuilder.whereRaw("position('" + req.query.search + "' in display_name) > 0 OR position('" + req.query.search + "' in email) > 0 OR position('" + req.query.search + "' in \"from\") > 0"); //TODO: improve on names, make lower case
+      if("search" in req.query) queryBuilder.whereRaw("position('" + req.query.search + "' in display_name) > 0 OR position('" + req.query.search + "' in email) > 0 OR position('" + req.query.search + "' in \"from\") > 0"); //TODO: improve on names, make lower case ALSO SQL injection vulnerable here
     })
     .paginate(30, req.query.page ? parseInt(req.query.page) : 1)
     .then(function(results){
