@@ -1,12 +1,12 @@
+require('dotenv').config();
 var express = require("express");
 var app = express();
 var knex = require('knex')({
   client: 'pg',
-  connection: {
-    host : '127.0.0.1',
-    database : 'pa_directory'
-  }
+  connection: process.env.DATABASE_URL,
+  ssl: true
 });
+
 require('knex-paginator')(knex);
 var db = require("./app/db.js");
 
