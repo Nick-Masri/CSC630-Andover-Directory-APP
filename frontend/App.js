@@ -1,9 +1,14 @@
 import HomeScreen from './screens/HomeScreen'
 import SearchScreen from './screens/Search'
 import React from 'react';
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation'
 import { StyleSheet, Text, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+
+
+const AppStack = createStackNavigator({ Home: HomeScreen, Other: OtherScreen });
+const AuthStack = createStackNavigator({ SignIn: SignInScreen });
+
 
 const AppNavigator = createStackNavigator(
   { Home: HomeScreen,
