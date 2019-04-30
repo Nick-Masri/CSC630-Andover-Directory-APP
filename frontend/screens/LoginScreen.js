@@ -55,6 +55,30 @@ const styles = StyleSheet.create({
 });
 
 export default class FirstPage extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+    };
+  }
+
+  login = () => {
+    fetch('http://localhost:3000/authenticate', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: this.state.email,
+        password: this.state.password,
+      }),
+    }).then((response) => {
+      console.log(response);
+
+      // TODO: Add in redirect based on authentication
+    });
+  }
+
+
   render() {
     return (
       <View style={styles.pageContainer}>
@@ -63,20 +87,20 @@ export default class FirstPage extends Component {
           <Image source={require('./assets/andoverLogo.png')} style={styles.andoverLogo} />
           <TextInput
            style={{height: 40}}
-           placeholder="Email Address"
-           onChangeText={(text) => this.setState({text})}
+           placeholder="Email Address" // TODO: Check on the frontend that this is a valid email address
+           onChangeText={(text) => this.setState({email})}
          />
           <TextInput
            style={{height: 40}}
            placeholder="Password"
-           onChangeText={(text) => this.setState({text})}
+           onChangeText={(text) => this.setState({password})}
          />
 
          <Button
           title="Login"
+          onPress=this.login();
           buttonStyle={styles.loginButton}
         />
-
         </View>
       </View>
     );

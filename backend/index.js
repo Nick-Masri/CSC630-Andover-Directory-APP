@@ -52,7 +52,6 @@ app.get("/people", function(req, res){
     });
 });
 
-
 /////////////// Authentication ///////////////
 
 /*  PASSPORT SETUP  */
@@ -72,8 +71,6 @@ passport.deserializeUser(function(id, cb) {
     cb(err, user);
   });
 });
-
-
 
 //* PASSPORT LOCAL AUTHENTICATION */
 const LocalStrategy = require('passport-local').Strategy;
@@ -101,7 +98,8 @@ passport.use(new LocalStrategy(
       }
 ));
 
-app.post('/',
+// Authenticate Users
+app.post('/authenticate',
   passport.authenticate('local', { failureRedirect: '/error' }),
   function(req, res) {
     res.status(200);
@@ -117,7 +115,6 @@ app.post("/users", function(req, res) {
     res.status(200).send("Succesfully Created Entry in Users Table");
   })
 });
-
 
 // Run Server
 app.listen(process.env.PORT || 3000, function(){
