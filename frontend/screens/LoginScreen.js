@@ -98,7 +98,7 @@ export default class FirstPage extends Component {
 
          <Button
           title="Login"
-          onPress=this.login();
+          onPress={this.login()}
           buttonStyle={styles.loginButton}
         />
         </View>

@@ -17,18 +17,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   andoverLogo: {
-    width: 300,
-    height: 300,
+    width: 320,
+    height: 320,
     resizeMode: "stretch",
     alignItems: 'center',
     margin: 'auto',
   },
   appName: {
-    fontSize: 72,
+    fontSize: 60,
     color: '#FFF',
-    marginBottom: 50,
+    marginBottom: 40,
     fontFamily: 'Roboto',
-    marginTop: 50,
+    marginTop: 65,
     textAlign: 'center'
   },
   button: {
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     borderColor: '#FFF',
-    marginTop: 50,
   },
   signUpButton: {
     marginBottom: 50,
@@ -55,6 +54,12 @@ const styles = StyleSheet.create({
 });
 
 export default class FirstPage extends Component {
+
+  static navigationOptions = {
+    header: null,
+  };
+
+
   render() {
     return (
       <View style={styles.pageContainer}>
