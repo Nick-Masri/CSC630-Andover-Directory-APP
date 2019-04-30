@@ -43,6 +43,43 @@ app.get("/people", function(req, res){
     });
 });
 
+
+
+////////// not protected ////////////
+// Create Users
+app.post("/users", function(req, res) {
+  knex("users").insert({
+    email: req.body['email'],
+    password: bcrypt.hashSync(req.body['password'])
+  }).then(function() {
+    res.status(200).send("Succesfully Created Entry in Users Table");
+  })
+});
+
+
+app.post("/users/auth", function(req, res) {
+  // Authenticate and retrieve the access and refresh tokens in exchange of email/password
+});
+
+
+app.post("/users/auth/refresh", function(req, res) {
+  // Authenticate and retrieve the access token in exchange of the refresh token.
+});
+
+//////////// protected /////////////
+// Retrive a list of users
+app.get("/users", function(req, res) {
+  knex.select("*").from('users').then(
+     res.status(200);
+  )
+});
+
+app.post("/users/auth/revoke", function(req, res) {
+  // Log out, revoke access by destroying the user tokens
+});
+
+
+
 app.listen(process.env.PORT || 3000, function(){
   console.log("Listening on port " + (process.env.PORT || 3000));
 });

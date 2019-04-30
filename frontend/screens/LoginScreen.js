@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-native-elements';
 import { Text, View, Image, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 
 
@@ -58,7 +59,24 @@ export default class FirstPage extends Component {
     return (
       <View style={styles.pageContainer}>
         <View style={styles.widthContainer}>
-          
+          <Text style={styles.appName}>Directory Manager</Text>
+          <Image source={require('./assets/andoverLogo.png')} style={styles.andoverLogo} />
+          <TextInput
+           style={{height: 40}}
+           placeholder="Email Address"
+           onChangeText={(text) => this.setState({text})}
+         />
+          <TextInput
+           style={{height: 40}}
+           placeholder="Password"
+           onChangeText={(text) => this.setState({text})}
+         />
+
+         <Button
+          title="Login"
+          buttonStyle={styles.loginButton}
+        />
+
         </View>
       </View>
     );
