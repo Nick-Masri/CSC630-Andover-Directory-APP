@@ -4,7 +4,7 @@ import { Text, View, Image, StyleSheet, TouchableOpacity, Alert} from 'react-nat
 
 const styles = StyleSheet.create({
   pageContainer: {
-    backgroundColor: '#00319C',
+    backgroundColor: '#1A46A6',
     flexDirection: 'column',
     alignItems: 'center',
     flex: 1,
@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   andoverLogo: {
-    width: 350,
-    height: 250,
+    width: 300,
+    height: 300,
     resizeMode: "stretch",
     alignItems: 'center',
     margin: 'auto',
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     fontFamily: 'Roboto',
     marginTop: 50,
+    textAlign: 'center'
   },
   button: {
     alignItems: 'center',
@@ -44,8 +45,8 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     marginBottom: 50,
-    backgroundColor: '#BBE6FE',
-    borderColor: '#BBE6FE',
+    backgroundColor: '#97E1E6',
+    borderColor: '#97E1E6',
   },
   buttonText: {
     fontSize: 28,
@@ -59,7 +60,7 @@ export default class FirstPage extends Component {
       <View style={styles.pageContainer}>
         <View style={styles.widthContainer}>
           <Text style={styles.appName}>Directory Manager</Text>
-          <Image source={require('./assets/andoverLogo.png')} style={styles.andoverLogo} />
+          <Image source={require('./../assets/andoverSeal.png')} style={styles.andoverLogo} />
           <TouchableOpacity
             style={[styles.loginButton, styles.button]}
             onPress={() => this.props.navigation.navigate('LoginScreen')}
