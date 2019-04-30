@@ -1,14 +1,23 @@
 require('dotenv').config();
-var express = require("express");
-var app = express();
-var knex = require('knex')({
-  client: 'pg',
-  connection: process.env.DATABASE_URL,
-  ssl: true
+const express = require("express");
+const app = express();
+
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+var knex = require("knex")({
+  client: "pg",
+  connection: {
+   host: "localhost",
+   user: "postgres",
+   password: "nick123",
+   database: "directoryApp"
+ }
 });
 
 require('knex-paginator')(knex);
-var db = require("./app/db.js");
+const db = require("./app/db.js");
 
 // Initialize Database
 db.initialize(knex);
@@ -44,8 +53,55 @@ app.get("/people", function(req, res){
 });
 
 
+/////////////// Authentication ///////////////
 
-////////// not protected ////////////
+const passport = require('passport');
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  User.findById(id, function(err, user) {
+    cb(err, user);
+  });
+});
+
+
+/* PASSPORT LOCAL AUTHENTICATION */
+
+const LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+      UserDetails.findOne({
+        username: username
+      }, function(err, user) {
+        if (err) {
+          return done(err);
+        }
+
+        if (!user) {
+          return done(null, false);
+        }
+
+        if (user.password != password) {
+          return done(null, false);
+        }
+        return done(null, user);
+      });
+  }
+));
+
+app.post('/',
+  passport.authenticate('local', { failureRedirect: '/error' }),
+  function(req, res) {
+    res.redirect('/success?username='+req.user.username);
+  });
+  
+
 // Create Users
 app.post("/users", function(req, res) {
   knex("users").insert({
@@ -55,29 +111,6 @@ app.post("/users", function(req, res) {
     res.status(200).send("Succesfully Created Entry in Users Table");
   })
 });
-
-
-app.post("/users/auth", function(req, res) {
-  // Authenticate and retrieve the access and refresh tokens in exchange of email/password
-});
-
-
-app.post("/users/auth/refresh", function(req, res) {
-  // Authenticate and retrieve the access token in exchange of the refresh token.
-});
-
-//////////// protected /////////////
-// Retrive a list of users
-app.get("/users", function(req, res) {
-  knex.select("*").from('users').then(
-     res.status(200);
-  )
-});
-
-app.post("/users/auth/revoke", function(req, res) {
-  // Log out, revoke access by destroying the user tokens
-});
-
 
 
 app.listen(process.env.PORT || 3000, function(){
