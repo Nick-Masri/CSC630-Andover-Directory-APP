@@ -15,3 +15,10 @@ http://www.passportjs.org/docs/
 
 Knex Docs:
 https://knexjs.org
+
+React Navigation:
+- https://medium.com/@shovonroy/how-to-properly-navigate-with-react-navigation-e38fe3bf7381
+- https://reactnavigation.org/docs/en/auth-flow.html
+
+Andover Logo and Visual Identity:
+https://www.andover.edu/brand/visual-identity#color

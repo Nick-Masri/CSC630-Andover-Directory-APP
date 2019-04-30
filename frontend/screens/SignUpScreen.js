@@ -94,7 +94,7 @@ export default class FirstPage extends Component {
            style={styles.formButton}
            placeholder="Email Address" // TODO: Check on the frontend that this is a valid email address
            onChangeText={(text) => this.setState({email:text})}
-         />
+         /> 
           <TextInput
            style={styles.formButton}
            placeholder="Password"
