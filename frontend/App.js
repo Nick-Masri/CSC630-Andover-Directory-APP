@@ -13,9 +13,13 @@ const AuthStack = createStackNavigator({ SignIn: SignInScreen });
 const AppNavigator = createStackNavigator(
   { Home: HomeScreen,
     Search: SearchScreen,
-
+    Login: LoginScreen,
+    SignUp: SignUp,
+    FirstPage: FirstPage,
   },
-  {initialRouteName: "Home"}
+  {
+    initialRouteName: "FirstPage"
+  }
 );
 
 const AppContainer = createAppContainer(AppNavigator);
