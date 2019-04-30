@@ -55,9 +55,13 @@ app.get("/people", function(req, res){
 
 /////////////// Authentication ///////////////
 
+/*  PASSPORT SETUP  */
 const passport = require('passport');
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.get('/success', (req, res) => res.send("Welcome "+req.query.username+"!!"));
+app.get('/error', (req, res) => res.send("error logging in"));
 
 passport.serializeUser(function(user, cb) {
   cb(null, user.id);
@@ -70,8 +74,8 @@ passport.deserializeUser(function(id, cb) {
 });
 
 
-/* PASSPORT LOCAL AUTHENTICATION */
 
+//* PASSPORT LOCAL AUTHENTICATION */
 const LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy(
@@ -100,19 +104,21 @@ app.post('/',
   function(req, res) {
     res.redirect('/success?username='+req.user.username);
   });
-  
 
 // Create Users
 app.post("/users", function(req, res) {
   knex("users").insert({
     email: req.body['email'],
-    password: bcrypt.hashSync(req.body['password'])
+    password: req.body['password']
   }).then(function() {
     res.status(200).send("Succesfully Created Entry in Users Table");
   })
 });
 
 
+
+
+// Run Server
 app.listen(process.env.PORT || 3000, function(){
   console.log("Listening on port " + (process.env.PORT || 3000));
 });
