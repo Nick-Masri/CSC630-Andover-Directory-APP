@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import {StatusBar} from 'react-native';
+// import {StatusBar} from 'react-native';
 var users = require('./assets/testDirectory.json')
 
 export default class App extends React.Component {
@@ -53,6 +53,7 @@ export default class App extends React.Component {
   }
   clearSearch = () => {
     this.setState({
+      search: '',
       searchStatus: false,
       students: [],
       page: 1,
@@ -60,15 +61,16 @@ export default class App extends React.Component {
       this.makeRemoteRequest();
     })
   }
-  updateSearch = search => {
+  updateSearch = (search) => {
     this.setState({ 
       search: search,
       searchStatus: true,
+    }, () => {
+      this.makeSearchRequest();
     });
-    this.makeSearchRequest();
   };
   handleLoadMore = () => {
-    if (this.searchStatus){
+    if (!this.state.searchStatus){
       this.setState({
         page: this.state.page + 1,
       }, () => {
@@ -76,6 +78,7 @@ export default class App extends React.Component {
       })
     }
   }
+
   render() {
     const { search } = this.state;
     return (
@@ -85,7 +88,7 @@ export default class App extends React.Component {
           onChangeText={this.updateSearch}
           value={search}
           lightTheme={true}
-          onClear={this.clearSearch}
+          onCancel={() => this.clearSearch()}
           />
         <FlatList
           contentContainerStyle={styles.list}
