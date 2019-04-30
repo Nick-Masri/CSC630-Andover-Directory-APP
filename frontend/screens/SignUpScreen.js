@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Text, View, Image, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput} from 'react-native';
 
 
 const styles = StyleSheet.create({
   pageContainer: {
-    backgroundColor: '#00319C',
+    backgroundColor: '#1A46A6',
     flexDirection: 'column',
     alignItems: 'center',
     flex: 1,
@@ -18,18 +18,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   andoverLogo: {
-    width: 350,
-    height: 250,
-    resizeMode: "stretch",
+    width: 250,
+    height: 320,
     alignItems: 'center',
     margin: 'auto',
+    marginTop: 0,
   },
   appName: {
-    fontSize: 72,
+    fontSize: 60,
     color: '#FFF',
-    marginBottom: 50,
+    marginBottom: 40,
     fontFamily: 'Roboto',
-    marginTop: 50,
+    marginTop: 0,
+    textAlign: 'center'
   },
   button: {
     alignItems: 'center',
@@ -41,14 +42,27 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     borderColor: '#FFF',
-    marginTop: 50,
+  },
+  signUpButton: {
+    marginBottom: 50,
+    backgroundColor: '#97E1E6',
+    borderColor: '#97E1E6',
   },
   buttonText: {
     fontSize: 28,
     color: '#FFF',
   },
+  formButton: {
+    borderBottomWidth: 1,
+    width: 350,
+    textAlign: 'left',
+    textAlignVertical: 'bottom',
+    padding: 5,
+    fontSize: 20,
+    color: '#FFF',
+    borderColor: '#FFF',
+  }
 });
-
 export default class FirstPage extends Component {
 
   constructor(props) {
@@ -59,7 +73,7 @@ export default class FirstPage extends Component {
     };
   }
 
-  login = () => {
+  signUp = () => {
     fetch('http://localhost:3000/users', {
       method: 'POST',
       body: JSON.stringify({
@@ -75,22 +89,22 @@ export default class FirstPage extends Component {
     return (
       <View style={styles.pageContainer}>
         <View style={styles.widthContainer}>
-          <Text style={styles.appName}>Directory Manager</Text>
-          <Image source={require('./assets/andoverLogo.png')} style={styles.andoverLogo} />
+          <Text style={styles.appName}>Sign Up</Text>
           <TextInput
-           style={{height: 40}}
-           placeholder="Email Address" // TODO: Check on the front end that this is a valid email address
-           onChangeText={(text) => this.setState({text})}
+           style={styles.formButton}
+           placeholder="Email Address" // TODO: Check on the frontend that this is a valid email address
+           onChangeText={(text) => this.setState({email:text})}
          />
           <TextInput
-           style={{height: 40}}
+           style={styles.formButton}
            placeholder="Password"
-           onChangeText={(text) => this.setState({text})}
+           onChangeText={(text) => this.setState({password:text})}
          />
 
          <Button
           title="SignUp"
           buttonStyle={styles.loginButton}
+          onPress={this.signUp()}
         />
 
         </View>

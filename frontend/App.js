@@ -1,6 +1,7 @@
 import FirstPage from './screens/FirstPage'
 import SearchScreen from './screens/Search'
 import LoginScreen from './screens/LoginScreen'
+import SignUpScreen from './screens/SignUpScreen'
 
 
 import React from 'react';
@@ -12,6 +13,7 @@ const AppNavigator = createStackNavigator({
     Home: FirstPage,
     Search: SearchScreen,
     LoginScreen: LoginScreen,
+    SignUpScreen: SignUpScreen,
   },
   {initialRouteName: "Home"}
 );

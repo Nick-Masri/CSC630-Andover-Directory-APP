@@ -74,7 +74,7 @@ export default class FirstPage extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.signUpButton, styles.button]}
-            onPress={() => this.props.navigation.navigate('SignUp')}
+            onPress={() => this.props.navigation.navigate('SignUpScreen')}
             >
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
