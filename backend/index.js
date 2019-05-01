@@ -6,10 +6,14 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-var knex = require('knex')({
-  client: 'pg',
-  connection: process.env.DATABASE_URL,
-  ssl: true
+var knex = require("knex")({
+  client: "pg",
+  connection: {
+   host: "localhost",
+   user: "postgres",
+   password: "nick123",
+   database: "directoryApp"
+ }
 });
 
 require('knex-paginator')(knex);
@@ -71,13 +75,14 @@ passport.deserializeUser(function(id, cb) {
 //* PASSPORT LOCAL AUTHENTICATION */
 const LocalStrategy = require('passport-local').Strategy;
 
-passport.use(new LocalStrategy(
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+  },
   function(username, password, done) {
       knex("users").where("email", username).then(
         function(user, err) {
-
-          user = user[0]
-
+          user = user[0];
           if (err) {
             return done(err);
           }
@@ -95,20 +100,26 @@ passport.use(new LocalStrategy(
 ));
 
 // Authenticate Users
-app.post('/authenticate',
-  passport.authenticate('local', { failureRedirect: '/error' }),
-  function(req, res) {
-    res.status(200);
-    res.redirect('/success?username='+req.user.username);
-  });
-
+app.post('/authenticate', function (req, res, next) {
+  passport.authenticate('local', function (err, user, info) {
+    if (err) {
+      return res.json({ error: 'Server Error', page:'LoginScreen'});
+    }
+    if (!user) {
+      return res.json({ error: 'We do not have a user with that email and password combination', page:'LoginScreen'});
+    }
+    if (user) {
+      return res.json({ page: 'HomeScreen' });
+    }
+  })(req, res, next);
+});
 // Create Users
 app.post("/users", function(req, res) {
   knex("users").insert({
     email: req.body['email'],
     password: req.body['password']
   }).then(function() {
-    res.status(200).send("Succesfully Created Entry in Users Table");
+    return res.json({ page: 'LoginScreen'});
   })
 });
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput} from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput } from 'react-native';
 
 
 const styles = StyleSheet.create({
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
   },
   andoverLogo: {
     width: 250,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     marginBottom: 40,
     fontFamily: 'Roboto',
-    marginTop: 0,
+    marginTop: 20,
     textAlign: 'center'
   },
   button: {
@@ -61,8 +61,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#FFF',
     borderColor: '#FFF',
+    marginBottom: 30,
+  },
+  warningText: {
+    color: '#DC493A',
+    fontSize: 20,
+    margin: 0,
+    height: 50,
   }
 });
+
+
 export default class FirstPage extends Component {
 
   constructor(props) {
@@ -70,19 +79,78 @@ export default class FirstPage extends Component {
     this.state = {
       email: '',
       password: '',
+      isEmail: false,
+      warningText: '',
+      invalidReason: ''
     };
   }
 
-  signUp = () => {
-    fetch('http://localhost:3000/users', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-      }),
-    }).then((response) => {
-      console.log(response);
+  login = () => {
+    if (this.state.isEmail) {
+
+      // Format into acceptable body type: https://stackoverflow.com/questions/35325370/post-a-x-www-form-urlencoded-request-from-react-native
+      // not sure if needed
+
+      var details = {
+        'email': this.state.email,
+        'password': this.state.password
+      };
+
+      const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+      fetch('http://172.16.251.133:3000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
+      }).then((response) => response.json())
+      .then((responseJson) => {
+         this.props.navigation.navigate('LoginScreen');
+      });
+    } else {
+      if (this.state.email + this.state.password == '') {
+        this.setState({invalidReason: 'You need to enter a username and password'}, () => {
+          this.invalidAuthentication();
+        });
+
+      } else {
+        this.setState({invalidReason: 'Please enter a valid andover.edu email address'}, () => {
+          this.invalidAuthentication();
+        });
+      }
+    }
+  }
+
+  invalidAuthentication = () => {
+    Alert.alert(
+      'Invalid',
+      this.state.invalidReason,
+      [
+        {text: 'Ok'},
+      ],
+      {cancelable: false},
+    );
+  }
+
+  invalidEmail = () => {
+    this.setState({
+      warningText: "Please enter a valid Andover.edu Email Address"
+    })
+  }
+
+  verify = (email) => {
+    this.setState({
+      email:email
     });
+    let reg = /[a-z]+[0-9]*@andover\.edu/;
+    if (reg.test(email) === false){
+      this.invalidEmail();
+    } else {
+      this.setState({
+        isEmail: true,
+        warningText: ''
+      });
+    }
   }
 
   render() {
@@ -92,21 +160,21 @@ export default class FirstPage extends Component {
           <Text style={styles.appName}>Sign Up</Text>
           <TextInput
            style={styles.formButton}
-           placeholder="Email Address" // TODO: Check on the frontend that this is a valid email address
-           onChangeText={(text) => this.setState({email:text})}
-         /> 
+           placeholder="Email@andover.edu" // TODO: Check on the frontend that this is a valid email address
+           onChangeText={(text) => this.verify(text)}
+         />
+          <Text style={styles.warningText}>{this.state.warningText}</Text>
           <TextInput
            style={styles.formButton}
            placeholder="Password"
+           secureTextEntry={true}
            onChangeText={(text) => this.setState({password:text})}
          />
-
          <Button
-          title="SignUp"
+          title="Sign Up"
+          onPress={() => this.login()}
           buttonStyle={styles.loginButton}
-          onPress={this.signUp()}
         />
-
         </View>
       </View>
     );

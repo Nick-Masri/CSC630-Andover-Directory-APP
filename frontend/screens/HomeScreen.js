@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 //directory.json should be in assets
+import { SearchBar } from 'react-native-elements';
 var users = require('../assets/testDirectory.json')
 
 export default class HomeScreen extends React.Component {
