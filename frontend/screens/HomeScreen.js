@@ -23,6 +23,7 @@ export default class HomeScreen extends React.Component {
       searchStatus: false,
     }
   }
+
   async componentDidMount(){
     try{
       this.makeRemoteRequest();
@@ -30,6 +31,7 @@ export default class HomeScreen extends React.Component {
       console.log(err)
     }
   }
+
   async makeRemoteRequest(){
     const page = this.state.page;
     const studentsApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?page=' + page);
@@ -41,6 +43,7 @@ export default class HomeScreen extends React.Component {
       })
     }
   }
+
   async makeSearchRequest(){
     const searchApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?search=' + this.state.search);
     const searchJson = await searchApiCall.json();
@@ -50,6 +53,7 @@ export default class HomeScreen extends React.Component {
       })
     }
   }
+
   clearSearch = () => {
     this.setState({
       search: '',
@@ -60,6 +64,7 @@ export default class HomeScreen extends React.Component {
       this.makeRemoteRequest();
     })
   }
+
   updateSearch = (search) => {
     this.setState({
       search: search,
@@ -68,6 +73,7 @@ export default class HomeScreen extends React.Component {
       this.makeSearchRequest();
     });
   };
+
   handleLoadMore = () => {
     if (!this.state.searchStatus){
       this.setState({
