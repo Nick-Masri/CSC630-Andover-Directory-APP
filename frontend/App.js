@@ -1,19 +1,18 @@
 import FirstPage from './screens/FirstPage'
-import SearchScreen from './screens/Search'
+import HomeScreen from './screens/Search'
 import LoginScreen from './screens/LoginScreen'
 import SignUpScreen from './screens/SignUpScreen'
 
 
 import React from 'react';
-import { createStackNavigator, createAppContainer } from 'react-navigation'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
 const AppNavigator = createStackNavigator({
     Home: FirstPage,
-    Search: SearchScreen,
     LoginScreen: LoginScreen,
     SignUpScreen: SignUpScreen,
+    HomeScreen: HomeScreen
   },
   {initialRouteName: "Home"}
 );
