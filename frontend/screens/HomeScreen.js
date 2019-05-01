@@ -1,34 +1,18 @@
-import FirstPage from './screens/FirstPage'
-import HomeScreen from './screens/Search'
-import LoginScreen from './screens/LoginScreen'
-import SignUpScreen from './screens/SignUpScreen'
-
-
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+//directory.json should be in assets
+var users = require('../assets/testDirectory.json')
 
-const AppNavigator = createStackNavigator({
-    Home: FirstPage,
-    LoginScreen: LoginScreen,
-    SignUpScreen: SignUpScreen,
-    HomeScreen: HomeScreen
-  },
-  {initialRouteName: "Home"}
-);
+export default class HomeScreen extends React.Component {
 
-const AppContainer = createAppContainer(AppNavigator);
-
-export default class App extends React.Component {
   renderItem(data) {
     return <View style={styles.listItem}>
             <Text>{data.item.display_name}</Text>
-            <Text>Cluster: {data.item.cluster}</Text>
-            <Text>Dorm: {data.item.grade}</Text>
-            <Text>From: {data.item.from}</Text>
-            <Text>Entered: {data.item.entered}</Text>
+            <Text>{data.item.cluster}</Text>
+            <Text>{data.item.grade}</Text>
           </View>
   }
+
   constructor(props){
     super(props);
     this.state ={
@@ -77,7 +61,7 @@ export default class App extends React.Component {
     })
   }
   updateSearch = (search) => {
-    this.setState({ 
+    this.setState({
       search: search,
       searchStatus: true,
     }, () => {
@@ -116,3 +100,28 @@ export default class App extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  listItem: {
+    borderColor: 'black',
+    borderWidth: 1,
+    padding: 10,
+    margin: 10,
+    alignSelf: 'stretch',
+  },
+  listItemTextMain: {
+    fontWeight: 'bold',
+  },
+  list:{
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  displayText: {
+    padding: 8,
+    textAlign: 'center',
+  }
+});
