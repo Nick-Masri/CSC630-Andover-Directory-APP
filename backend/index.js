@@ -6,14 +6,10 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-var knex = require("knex")({
-  client: "pg",
-  connection: {
-   host: "localhost",
-   user: "postgres",
-   password: "nick123",
-   database: "directoryApp"
- }
+var knex = require('knex')({
+  client: 'pg',
+  connection: process.env.DATABASE_URL,
+  ssl: true
 });
 
 require('knex-paginator')(knex);
