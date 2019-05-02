@@ -16,7 +16,6 @@ var knex = require('knex')({
   connection: process.env.DATABASE_URL,
   ssl: true
 });
-
 require('knex-paginator')(knex);
 const db = require("./app/db.js");
 
@@ -27,11 +26,38 @@ const bcrypt = require("bcrypt-nodejs");
 db.initialize(knex);
 db.populate(knex);
 
-// Routes
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.use(new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password'
+}, function(username, password, done) {
+  knex("users").where("email", username).then(function(user, err) {
+    user = user[0];
+    if(err) return done(err);
+
+    if(!user) return done(null, false); // If nothing found
+    if (!bcrypt.compareSync(user.password, password)) return done(null, false); // If passport incorrect
+
+    return done(null, user); //Otherwise, authenticate
+  });
+}));
+
+//////// ROUTES ////////
+
+// API (Gets all people, filterable)
 app.get("/people", function(req, res){
   knex.from("people")
     .select("*")
     .modify(function(queryBuilder){
+      if("search" in req.query) queryBuilder.where('search_body', 'like', '%' + req.query.search.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase() + '%');
+
       //Each field is a comma-separated list of values (i.e. clusters, dorms, etc.)
       if("dorms" in req.query) queryBuilder.whereIn('dorm', req.query.dorms.split(","));
 
@@ -42,8 +68,6 @@ app.get("/people", function(req, res){
       }));
 
       if("grades" in req.query) queryBuilder.whereIn('grade', req.query.grades.split(","));
-
-      if("search" in req.query) queryBuilder.whereRaw("position('" + req.query.search + "' in display_name) > 0 OR position('" + req.query.search + "' in email) > 0 OR position('" + req.query.search + "' in \"from\") > 0"); //TODO: improve on names, make lower case ALSO SQL injection vulnerable here
     })
     .paginate(30, req.query.page ? parseInt(req.query.page) : 1)
     .then(function(results){
@@ -103,17 +127,15 @@ passport.use(new LocalStrategy({
 // Authenticate Users
 app.post('/authenticate', function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
-    if (err) {
-      return res.json({ error: 'Server Error', page:'LoginScreen'});
-    }
-    if (!user) {
-      return res.json({ error: 'We do not have a user with that email and password combination', page:'LoginScreen'});
-    }
-    if (user) {
-      return res.json({ page: 'HomeScreen' });
-    }
+    if (err) return res.json({ error: 'Server Error', page: 'LoginScreen'});
+
+    if (!user) return res.json({ error: 'We do not have a user with that email and password combination', page:'LoginScreen'});
+
+    console.log(user);
+    return res.json({ page: 'HomeScreen' });
   })(req, res, next);
 });
+
 // Create Users
 app.post("/users", function(req, res) {
   knex("select").select().where("username", req.body['email']).then((response) => {

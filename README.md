@@ -14,5 +14,5 @@ The backend is simply an API to provide filterable or searchable access to Phill
 * `grades`: a comma-separated list of grades (i.e. Junior,Senior)
 * `dorms`: a comma-separated list of dorms
 * `entered`: a comma-separated list of what year a student entered in (i.e. 2015,2016)
-* `query`: a string to search to full-text search the database by. As of now, incomplete
-* `page`: an integer, default 1 
+* `search`: a string to search to full-text search the database by. As of now, incomplete
+* `page`: an integer, default 1

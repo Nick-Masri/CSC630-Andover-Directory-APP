@@ -1,7 +1,5 @@
 import React from 'react';
-import { TextInput, StyleSheet, Button, Text, View, FlatList, Picker } from 'react-native';
-import { SearchBar, } from 'react-native-elements';
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { TextInput, StyleSheet, Button, View, } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
 export default class FiltersScreen extends React.Component {
@@ -79,11 +77,14 @@ export default class FiltersScreen extends React.Component {
       };
       return (
         <View>
-          <TextInput
-            placeholder="Dorm"
-            onChangeText={(text) => this.setState({dorm: text})}
-            />
+          <View style={styles.textInputContainer}>
+            <TextInput
+              placeholder="Dorm"
+              onChangeText={(text) => this.setState({dorm: text})}
+              />
+          </View>
           <RNPickerSelect
+            style={pickerSelectStyles}
             placeholder={clusterInit}
             items={clusters}
             onValueChange={value => {
@@ -92,8 +93,10 @@ export default class FiltersScreen extends React.Component {
               });
             }}
             value={this.state.cluster}
+            
           />
           <RNPickerSelect
+            style={pickerSelectStyles}
             placeholder={gradeInit}
             items={grades}
             onValueChange={value => {
@@ -102,6 +105,7 @@ export default class FiltersScreen extends React.Component {
               });
             }}
             value={this.state.grade}
+
           />
           <Button
             title="Save"
@@ -116,3 +120,52 @@ export default class FiltersScreen extends React.Component {
       );
     }
   }
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    margin: 15,
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30,
+  },
+  inputAndroid: {
+    margin: 15,
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, 
+  },
+});
+
+const styles = StyleSheet.create({
+  inputText: {
+    padding: 10,
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30,
+  },
+  textInputContainer: {
+    margin: 15,
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30,
+  }
+});

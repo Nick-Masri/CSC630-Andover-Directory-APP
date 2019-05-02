@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, StyleSheet, Button, Text, View, FlatList, Picker } from 'react-native';
+import { StyleSheet, Button, Text, View, FlatList, } from 'react-native';
 import { SearchBar, } from 'react-native-elements';
 
 export default class SearchScreen extends React.Component {
