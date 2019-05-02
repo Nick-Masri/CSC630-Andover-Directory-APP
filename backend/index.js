@@ -82,7 +82,9 @@ app.post('/authenticate', function (req, res, next) {
     if (err) return res.json({ error: 'Server Error', page: 'LoginScreen'});
 
     if (!user) return res.json({ error: 'We do not have a user with that email and password combination', page:'LoginScreen'});
-    else return res.json({ page: 'HomeScreen' });
+
+    console.log(user);
+    return res.json({ page: 'HomeScreen' });
   })(req, res, next);
 });
 
