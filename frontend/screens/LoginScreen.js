@@ -88,22 +88,30 @@ export default class FirstPage extends Component {
   login = () => {
     if (this.state.isEmail) {
 
+      // Format into acceptable body type: https://stackoverflow.com/questions/35325370/post-a-x-www-form-urlencoded-request-from-react-native
+      // not sure if needed
+
+      var details = {
+        'email': this.state.email,
+        'password': this.state.password
+      };
+
+      const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&'); // Putting json into acceptable format to be read
       fetch('https://csc630-project-2.herokuapp.com/authenticate', {
         method: 'POST',
-        body: {
-          'email': this.state.email,
-          'password': this.state.password
-        }
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
       }).then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.page == "HomeScreen"){
-           this.props.navigation.navigate('HomeScreen');
+           this.props.navigation.navigate('Search');
         } else {
           this.setState({invalidReason: responseJson.error}, () => {
             this.invalidAuthentication();
           });
         }
-        console.log(responseJson);
       });
     } else {
       if (this.state.email + this.state.password == '') {
