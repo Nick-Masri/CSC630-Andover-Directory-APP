@@ -32,9 +32,12 @@ export default class SearchScreen extends React.Component {
       }
     }
     async makeRemoteRequest(){
+      filters = await this.getFilters()
+
       const page = this.state.page;
-      const studentsApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?page=' + page);
+      const studentsApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?' + filters + '&page=' + page);
       const studentJson = await studentsApiCall.json();
+      console.log(filters)
       if (studentJson.data.length !== 0){
         this.setState({
           students: this.state.students.concat(studentJson.data),
@@ -50,6 +53,27 @@ export default class SearchScreen extends React.Component {
           students: searchJson.data,
         })
       }
+    }
+    getFilters = () => {
+      const dorm = this.props.navigation.getParam('dorm')
+      const grade = this.props.navigation.getParam('grade')
+      const cluster = this.props.navigation.getParam('cluster')
+      const search = this.state.search
+      var filters = ''
+      if(dorm !== undefined && dorm !== null && dorm !== ''){
+        filters = '&dorms=' + dorm
+      }
+      if(grade !== undefined && grade !== null && grade !== ''){
+        filters = filters + '&grades=' + grade
+      }
+      if(cluster !== undefined && cluster !== null && cluster !== ''){
+        filters = filters + '&cluster=' + cluster
+      }
+      if(search !== ''){
+        filters = filters + '&search=' + search
+      }
+      console.log(filters)
+      return filters
     }
     clearSearch = () => {
       this.setState({
@@ -94,7 +118,6 @@ export default class SearchScreen extends React.Component {
             title="Filters"
             onPress={() => this.props.navigation.navigate('Filters')}
           />
-          <Text>{this.props.navigation.getParam('dorm')}</Text>
           <FlatList
             contentContainerStyle={styles.list}
             data={this.state.students}

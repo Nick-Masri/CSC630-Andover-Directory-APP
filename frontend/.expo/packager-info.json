@@ -2,8 +2,15 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
+<<<<<<< HEAD
   "packagerPid": 94095,
   "expoServerNgrokUrl": "https://sa-frz.anonymous.frontend.exp.direct",
   "packagerNgrokUrl": "https://packager.sa-frz.anonymous.frontend.exp.direct",
   "ngrokPid": 94117
+=======
+  "packagerPid": 5736,
+  "expoServerNgrokUrl": "https://f3-2uz.anonymous.frontend.exp.direct",
+  "packagerNgrokUrl": "https://packager.f3-2uz.anonymous.frontend.exp.direct",
+  "ngrokPid": 18760
+>>>>>>> a4af3e0229a3bb66f89aded36c27ad2698cddc85
 }
