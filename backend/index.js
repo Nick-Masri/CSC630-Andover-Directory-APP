@@ -1,11 +1,16 @@
 require('dotenv').config();
+
 const express = require("express");
 const app = express();
 
-const bodyParser = require("body-parser");
 const passport = require('passport');
-app.use(bodyParser.urlencoded({ extended: true }));
 
+// Body Parser Setup
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
+
+// Knex Setup
 var knex = require('knex')({
   client: 'pg',
   connection: process.env.DATABASE_URL,
@@ -14,7 +19,6 @@ var knex = require('knex')({
 
 require('knex-paginator')(knex);
 const db = require("./app/db.js");
-
 
 // Encryption
 const bcrypt = require("bcrypt-nodejs");
@@ -82,11 +86,9 @@ passport.use(new LocalStrategy({
           if (err) {
             return done(err);
           }
-
           if (!user) {
             return done(null, false);
           }
-
           if (!bcrypt.compareSync(user.password, password)) {
             return done(null, false);
           }
@@ -114,12 +116,19 @@ app.post('/authenticate', function (req, res, next) {
 });
 // Create Users
 app.post("/users", function(req, res) {
-  knex("users").insert({
-    email: req.body['email'],
-    password: bcrypt.hashSync(req.body['password'])
-  }).then(function() {
-    return res.json({ page: 'LoginScreen'});
+  knex("select").select().where("username", req.body['email']).then((response) => {
+    if (!response.length){ // Check if the username doesn't already exist
+      knex("users").insert({
+        email: req.body['email'],
+        password: bcrypt.hashSync(req.body['password'])
+      }).then(function() {
+        return res.json({ page: 'LoginScreen'});
+      })
+    } else {
+      return res.json({ page: 'SignUpScreen', error: 'That username is already taken'});
+    }
   })
+
 });
 
 // Run Server

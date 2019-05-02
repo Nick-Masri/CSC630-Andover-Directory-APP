@@ -90,7 +90,7 @@ export default class FirstPage extends Component {
 
       // Format into acceptable body type: https://stackoverflow.com/questions/35325370/post-a-x-www-form-urlencoded-request-from-react-native
       // not sure if needed
-      // TODO: make sure that they aren't submitting a duplicate email that has already been submitted. 
+      // TODO: make sure that they aren't submitting a duplicate email that has already been submitted.
 
       var details = {
         'email': this.state.email,

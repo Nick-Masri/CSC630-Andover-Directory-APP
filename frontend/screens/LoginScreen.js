@@ -167,7 +167,7 @@ export default class FirstPage extends Component {
           <Text style={styles.appName}>Login</Text>
           <TextInput
            style={styles.formButton}
-           placeholder="Email@andover.edu" // TODO: Check on the frontend that this is a valid email address
+           placeholder="Email@andover.edu" 
            onChangeText={(text) => this.verify(text)}
          />
           <Text style={styles.warningText}>{this.state.warningText}</Text>
