@@ -49,6 +49,7 @@ module.exports = {
             return d;
           });
 
+          //Insert rows
           knex.batchInsert('people', rows)
             .then(function(){
               console.log("Successfully inserted rows");

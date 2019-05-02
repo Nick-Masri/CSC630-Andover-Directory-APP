@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 
 const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 // Body Parser Setup
 const bodyParser = require("body-parser");
@@ -69,7 +70,7 @@ app.get("/people", function(req, res){
 
       if("grades" in req.query) queryBuilder.whereIn('grade', req.query.grades.split(","));
     })
-    .paginate(30, req.query.page ? parseInt(req.query.page) : 1)
+    .paginate(30, req.query.page ? parseInt(req.query.page) : 1) //Paginate
     .then(function(results){
       res.json(results);
     })
@@ -79,50 +80,6 @@ app.get("/people", function(req, res){
       res.send("ERROR");
     });
 });
-
-/////////////// Authentication ///////////////
-
-/*  PASSPORT SETUP  */
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
-});
-
-passport.deserializeUser(function(id, cb) {
-  User.findById(id, function(err, user) {
-    cb(err, user);
-  });
-});
-
-//* PASSPORT LOCAL AUTHENTICATION */
-const LocalStrategy = require('passport-local').Strategy;
-
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-  },
-  function(username, password, done) {
-      knex("users").where("email", username).then(
-        function(user, err) {
-          user = user[0];
-          if (err) {
-            return done(err);
-          }
-          if (!user) {
-            return done(null, false);
-          }
-          if (!bcrypt.compareSync(user.password, password)) {
-            return done(null, false);
-          }
-          if (user.password != password) {
-            return done(null, false);
-          }
-          return done(null, user);
-      });
-      }
-));
 
 // Authenticate Users
 app.post('/authenticate', function (req, res, next) {
@@ -150,7 +107,6 @@ app.post("/users", function(req, res) {
       return res.json({ page: 'SignUpScreen', error: 'That username is already taken'});
     }
   })
-
 });
 
 // Run Server
