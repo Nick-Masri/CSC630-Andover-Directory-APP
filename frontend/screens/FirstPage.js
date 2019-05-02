@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     fontSize: 60,
     color: '#FFF',
     marginBottom: 40,
-    // fontFamily: 'Roboto',
     marginTop: 65,
     textAlign: 'center'
   },
@@ -57,8 +56,7 @@ export default class FirstPage extends Component {
 
   static navigationOptions = {
     header: null,
-  };
-
+  }; // removes navigation header that comes with react navigation
 
   render() {
     return (
