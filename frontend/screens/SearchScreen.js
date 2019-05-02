@@ -37,20 +37,10 @@ export default class SearchScreen extends React.Component {
       const page = this.state.page;
       const studentsApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?' + filters + '&page=' + page);
       const studentJson = await studentsApiCall.json();
-      console.log(filters)
       if (studentJson.data.length !== 0){
         this.setState({
           students: this.state.students.concat(studentJson.data),
           loading: false,
-        })
-      }
-    }
-    async makeSearchRequest(){
-      const searchApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?search=' + this.state.search);
-      const searchJson = await searchApiCall.json();
-      if (searchJson.data.length !== 0){
-        this.setState({
-          students: searchJson.data,
         })
       }
     }
@@ -67,12 +57,11 @@ export default class SearchScreen extends React.Component {
         filters = filters + '&grades=' + grade
       }
       if(cluster !== undefined && cluster !== null && cluster !== ''){
-        filters = filters + '&cluster=' + cluster
+        filters = filters + '&clusters=' + cluster
       }
       if(search !== ''){
         filters = filters + '&search=' + search
       }
-      console.log(filters)
       return filters
     }
     clearSearch = () => {
