@@ -70,7 +70,7 @@ app.get("/people", function(req, res){
 
       if("grades" in req.query) queryBuilder.whereIn('grade', req.query.grades.split(","));
     })
-    .paginate(30, req.query.page ? parseInt(req.query.page) : 1)
+    .paginate(30, req.query.page ? parseInt(req.query.page) : 1) //Paginate
     .then(function(results){
       res.json(results);
     })
