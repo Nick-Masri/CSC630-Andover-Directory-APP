@@ -39,23 +39,19 @@ export default class SearchScreen extends React.Component {
     const studentsApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?' + filters + '&page=' + page);
     const studentJson = await studentsApiCall.json();
     if (studentJson.data.length !== 0){
-      this.setState({
-        students: this.state.students.concat(studentJson.data),
-        loading: false,
-      })
+      if (this.state.search.length > 0){
+        this.setState({
+          students: studentJson.data,
+        })
+      }else {
+        this.setState({
+          students: this.state.students.concat(studentJson.data),
+          loading: false,
+        })
+      }
     }
   }
-  // async makeSearchRequest(){
-  //   filters = await this.getFilters()
-  //   const searchApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?' + filters);
-  //   const searchJson = await searchApiCall.json();
-  //   console.log('https://csc630-project-2.herokuapp.com/people?' + filters)
-  //   if (searchJson.data.length !== 0){
-  //     this.setState({
-  //       students: searchJson.data,
-  //     })
-  //   }
-  // }
+  //creates a string of all filters from the filter page
   getFilters = () => {
     const dorm = this.props.navigation.getParam('dorm')
     const grade = this.props.navigation.getParam('grade')
