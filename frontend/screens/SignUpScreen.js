@@ -92,7 +92,7 @@ export default class FirstPage extends Component {
            'password': this.state.password
          };
 
-     const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+     const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&'); // Putting json into acceptable format to be read
      fetch('http://172.16.251.133:3000/users', {
        method: 'POST',
        headers: {
