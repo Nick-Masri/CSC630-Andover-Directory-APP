@@ -87,22 +87,13 @@ export default class FirstPage extends Component {
 
   login = () => {
     if (this.state.isEmail) {
-
-      // Format into acceptable body type: https://stackoverflow.com/questions/35325370/post-a-x-www-form-urlencoded-request-from-react-native
-      // not sure if needed
-
-      var details = {
-        'email': this.state.email,
-        'password': this.state.password
-      };
-
-      const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+      
       fetch('http://172.16.251.133:3000/authenticate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: formBody
+        body: {
+          'email': this.state.email,
+          'password': this.state.password
+        }
       }).then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.page == "HomeScreen"){
@@ -167,7 +158,7 @@ export default class FirstPage extends Component {
           <Text style={styles.appName}>Login</Text>
           <TextInput
            style={styles.formButton}
-           placeholder="Email@andover.edu" 
+           placeholder="Email@andover.edu"
            onChangeText={(text) => this.verify(text)}
          />
           <Text style={styles.warningText}>{this.state.warningText}</Text>
