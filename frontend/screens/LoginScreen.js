@@ -99,10 +99,10 @@ export default class FirstPage extends Component {
       const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
       fetch('https://csc630-project-2.herokuapp.com/authenticate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: formBody
+        body: {
+          'email': this.state.email,
+          'password': this.state.password
+        }
       }).then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.page == "HomeScreen"){
@@ -166,7 +166,7 @@ export default class FirstPage extends Component {
           <Text style={styles.appName}>Login</Text>
           <TextInput
            style={styles.formButton}
-           placeholder="Email@andover.edu" // TODO: Check on the frontend that this is a valid email address
+           placeholder="Email@andover.edu"
            onChangeText={(text) => this.verify(text)}
          />
           <Text style={styles.warningText}>{this.state.warningText}</Text>

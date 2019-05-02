@@ -1,22 +1,27 @@
 require('dotenv').config();
-const bcrypt = require("bcrypt-nodejs");
+
 const express = require("express");
-const bodyParser = require("body-parser");
-const db = require("./app/db.js");
+const app = express();
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-// Initialize Express
-const app = express();
+// Body Parser Setup
+const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
-// Initialize Knex
+// Knex Setup
 var knex = require('knex')({
   client: 'pg',
   connection: process.env.DATABASE_URL,
   ssl: true
 });
 require('knex-paginator')(knex);
+const db = require("./app/db.js");
+
+// Encryption
+const bcrypt = require("bcrypt-nodejs");
 
 // Initialize Database
 db.initialize(knex);
@@ -39,7 +44,7 @@ passport.use(new LocalStrategy({
     if(err) return done(err);
 
     if(!user) return done(null, false); // If nothing found
-    if (!bcrypt.compareSync(user.password, password)) return done(null, false); // If passport incorrect
+    if (!bcrypt.compareSync(password, user.password)) return done(null, false); // If passport incorrect
 
     return done(null, user); //Otherwise, authenticate
   });
@@ -65,7 +70,7 @@ app.get("/people", function(req, res){
 
       if("grades" in req.query) queryBuilder.whereIn('grade', req.query.grades.split(","));
     })
-    .paginate(30, req.query.page ? parseInt(req.query.page) : 1)
+    .paginate(30, req.query.page ? parseInt(req.query.page) : 1) //Paginate
     .then(function(results){
       res.json(results);
     })
@@ -82,18 +87,26 @@ app.post('/authenticate', function (req, res, next) {
     if (err) return res.json({ error: 'Server Error', page: 'LoginScreen'});
 
     if (!user) return res.json({ error: 'We do not have a user with that email and password combination', page:'LoginScreen'});
-    else return res.json({ page: 'HomeScreen' });
+
+    console.log(user);
+    return res.json({ page: 'HomeScreen' });
   })(req, res, next);
 });
 
 // Create Users
 app.post("/users", function(req, res) {
-  knex("users").insert({
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password)
-  }).then(function() {
-    return res.json({ page: 'LoginScreen'});
-  });
+  knex("select").select().where("username", req.body['email']).then((response) => {
+    if (!response.length){ // Check if the username doesn't already exist
+      knex("users").insert({
+        email: req.body['email'],
+        password: bcrypt.hashSync(req.body['password'])
+      }).then(function() {
+        return res.json({ page: 'LoginScreen'});
+      })
+    } else {
+      return res.json({ page: 'SignUpScreen', error: 'That username is already taken'});
+    }
+  })
 });
 
 // Run Server
