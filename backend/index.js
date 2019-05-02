@@ -15,6 +15,10 @@ var knex = require('knex')({
 require('knex-paginator')(knex);
 const db = require("./app/db.js");
 
+
+// Encryption
+const bcrypt = require("bcrypt-nodejs");
+
 // Initialize Database
 db.initialize(knex);
 db.populate(knex);
@@ -54,9 +58,6 @@ app.get("/people", function(req, res){
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/success', (req, res) => res.send("Welcome "+req.query.username+"!!"));
-app.get('/error', (req, res) => res.send("error logging in"));
-
 passport.serializeUser(function(user, cb) {
   cb(null, user.id);
 });
@@ -86,6 +87,9 @@ passport.use(new LocalStrategy({
             return done(null, false);
           }
 
+          if (!bcrypt.compareSync(user.password, password)) {
+            return done(null, false);
+          }
           if (user.password != password) {
             return done(null, false);
           }
@@ -112,7 +116,7 @@ app.post('/authenticate', function (req, res, next) {
 app.post("/users", function(req, res) {
   knex("users").insert({
     email: req.body['email'],
-    password: req.body['password']
+    password: bcrypt.hashSync(req.body['password'])
   }).then(function() {
     return res.json({ page: 'LoginScreen'});
   })
