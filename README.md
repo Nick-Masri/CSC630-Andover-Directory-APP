@@ -16,6 +16,13 @@ expo start
 
 Then, follow the instructions which open up in the browser and connect with the mobile Expo app.
 
+## Future To-Do List
+
+* Better full-text search. As of now, searching "Jeffrey Shen" will not return any results, though searching "Shen Jeffrey" will.
+* Email verification
+* Storing sessions on the mobile app so the user does not need to repeately log-in.
+* API verification—requiring certain credentials to access the API (so the data is not leaked to non-PA members)
+
 ## Table of Contents
 
 This project contains two components: a backend and a frontend, each contained in their respective folders.
