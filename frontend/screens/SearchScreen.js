@@ -44,6 +44,17 @@ export default class SearchScreen extends React.Component {
         })
       }
     }
+    async makeSearchRequest(){
+      filters = await this.getFilters()
+      const searchApiCall = await fetch('https://csc630-project-2.herokuapp.com/people?' + filters);
+      const searchJson = await searchApiCall.json();
+      console.log('https://csc630-project-2.herokuapp.com/people?' + filters)
+      if (searchJson.data.length !== 0){
+        this.setState({
+          students: searchJson.data,
+        })
+      }
+    }
     getFilters = () => {
       const dorm = this.props.navigation.getParam('dorm')
       const grade = this.props.navigation.getParam('grade')

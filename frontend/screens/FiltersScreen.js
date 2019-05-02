@@ -40,6 +40,14 @@ export default class FiltersScreen extends React.Component {
           label: 'Pine Knoll',
           value: 'PKN',
         },
+        {
+          label: 'West Quad North',
+          value: 'WQN',
+        },
+        {
+          label: 'West Quad South',
+          value: 'WQS',
+        },
       ];
       const grades = [
         {

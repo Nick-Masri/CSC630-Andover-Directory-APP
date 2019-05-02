@@ -8,12 +8,27 @@ import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 const AppNavigator = createStackNavigator({
-    Home: FirstPage,
-    LoginScreen: LoginScreen,
-    SignUpScreen: SignUpScreen,
-    Search: SearchScreen,
-    Filters: FiltersScreen,
+  Home : {
+    screen: FirstPage,
   },
+  LoginScreen : {
+    screen: LoginScreen,
+  },
+  SignUpScreen : {
+    screen: SignUpScreen,
+  },
+  Search : {
+    screen: SearchScreen,
+    navigationOptions: ({navigation}) => ({
+      headerLeft: null,
+    })
+  },
+  Filters : {
+    screen: FiltersScreen,
+    navigationOptions: ({navigation}) => ({
+      headerLeft: null,
+    })
+  }},
   {initialRouteName: "Search"}
 );
 
