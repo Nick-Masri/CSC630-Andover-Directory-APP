@@ -31,7 +31,7 @@ const AppNavigator = createStackNavigator({
       headerLeft: null,
     })
   }},
-  {initialRouteName: "Search"}
+  {initialRouteName: "Home"}
 );
 
 const AppContainer = createAppContainer(AppNavigator);

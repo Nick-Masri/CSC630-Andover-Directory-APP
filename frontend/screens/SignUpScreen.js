@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     fontSize: 60,
     color: '#FFF',
     marginBottom: 40,
-    // fontFamily: 'Roboto',
     marginTop: 20,
     textAlign: 'center'
   },
@@ -88,13 +87,18 @@ export default class FirstPage extends Component {
   login = () => {
     if (this.state.isEmail) {
 
-      const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-      fetch('https://csc630-project-2.herokuapp.com/users', {
-        method: 'POST',
-        body: {
-          'email': this.state.email,
-          'password': this.state.password
-        }
+      var details = {
+           'email': this.state.email,
+           'password': this.state.password
+         };
+
+     const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&'); // Putting json into acceptable format to be read
+     fetch('https://csc630-project-2.herokuapp.com/users', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+       },
+       body: formBody
       }).then((response) => response.json())
       .then((responseJson) => {
          this.props.navigation.navigate('LoginScreen');
