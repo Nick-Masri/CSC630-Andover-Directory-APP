@@ -1,20 +1,35 @@
 import FirstPage from './screens/FirstPage'
-import HomeScreen from './screens/HomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import SignUpScreen from './screens/SignUpScreen'
+import SearchScreen from './screens/SearchScreen'
+import FiltersScreen from './screens/FiltersScreen'
 
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { SearchBar } from 'react-native-elements';
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 const AppNavigator = createStackNavigator({
-    Home: FirstPage,
-    LoginScreen: LoginScreen,
-    SignUpScreen: SignUpScreen,
-    HomeScreen: HomeScreen
+  Home : {
+    screen: FirstPage,
   },
-  {initialRouteName: "Home"}
+  LoginScreen : {
+    screen: LoginScreen,
+  },
+  SignUpScreen : {
+    screen: SignUpScreen,
+  },
+  Search : {
+    screen: SearchScreen,
+    navigationOptions: ({navigation}) => ({
+      headerLeft: null,
+    })
+  },
+  Filters : {
+    screen: FiltersScreen,
+    navigationOptions: ({navigation}) => ({
+      headerLeft: null,
+    })
+  }},
+  {initialRouteName: "Search"}
 );
 
 const AppContainer = createAppContainer(AppNavigator);
