@@ -1,29 +1,53 @@
 require('dotenv').config();
+const bcrypt = require("bcrypt-nodejs");
 const express = require("express");
-const app = express();
-
 const bodyParser = require("body-parser");
+const db = require("./app/db.js");
 const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+// Initialize Express
+const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Initialize Knex
 var knex = require('knex')({
   client: 'pg',
   connection: process.env.DATABASE_URL,
   ssl: true
 });
-
 require('knex-paginator')(knex);
-const db = require("./app/db.js");
-
-
-// Encryption
-const bcrypt = require("bcrypt-nodejs");
 
 // Initialize Database
 db.initialize(knex);
 db.populate(knex);
 
-// Routes
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.use(new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password'
+}, function(username, password, done) {
+  knex("users").where("email", username).then(function(user, err) {
+    user = user[0];
+    if(err) return done(err);
+
+    if(!user) return done(null, false); // If nothing found
+    if (!bcrypt.compareSync(user.password, password)) return done(null, false); // If passport incorrect
+
+    return done(null, user); //Otherwise, authenticate
+  });
+}));
+
+//////// ROUTES ////////
+
+// API (Gets all people, filterable)
 app.get("/people", function(req, res){
   knex.from("people")
     .select("*")
@@ -52,74 +76,24 @@ app.get("/people", function(req, res){
     });
 });
 
-/////////////// Authentication ///////////////
-
-/*  PASSPORT SETUP  */
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
-});
-
-passport.deserializeUser(function(id, cb) {
-  User.findById(id, function(err, user) {
-    cb(err, user);
-  });
-});
-
-//* PASSPORT LOCAL AUTHENTICATION */
-const LocalStrategy = require('passport-local').Strategy;
-
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-  },
-  function(username, password, done) {
-      knex("users").where("email", username).then(
-        function(user, err) {
-          user = user[0];
-          if (err) {
-            return done(err);
-          }
-
-          if (!user) {
-            return done(null, false);
-          }
-
-          if (!bcrypt.compareSync(user.password, password)) {
-            return done(null, false);
-          }
-          if (user.password != password) {
-            return done(null, false);
-          }
-          return done(null, user);
-      });
-      }
-));
-
 // Authenticate Users
 app.post('/authenticate', function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
-    if (err) {
-      return res.json({ error: 'Server Error', page:'LoginScreen'});
-    }
-    if (!user) {
-      return res.json({ error: 'We do not have a user with that email and password combination', page:'LoginScreen'});
-    }
-    if (user) {
-      return res.json({ page: 'HomeScreen' });
-    }
+    if (err) return res.json({ error: 'Server Error', page: 'LoginScreen'});
+
+    if (!user) return res.json({ error: 'We do not have a user with that email and password combination', page:'LoginScreen'});
+    else return res.json({ page: 'HomeScreen' });
   })(req, res, next);
 });
+
 // Create Users
 app.post("/users", function(req, res) {
   knex("users").insert({
-    email: req.body['email'],
-    password: bcrypt.hashSync(req.body['password'])
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password)
   }).then(function() {
     return res.json({ page: 'LoginScreen'});
-  })
+  });
 });
 
 // Run Server
