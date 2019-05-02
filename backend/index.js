@@ -3,17 +3,13 @@ const express = require("express");
 const app = express();
 
 const bodyParser = require("body-parser");
+const passport = require('passport');
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-var knex = require("knex")({
-  client: "pg",
-  connection: {
-   host: "localhost",
-   user: "postgres",
-   password: "nick123",
-   database: "directoryApp"
- }
+var knex = require('knex')({
+  client: 'pg',
+  connection: process.env.DATABASE_URL,
+  ssl: true
 });
 
 require('knex-paginator')(knex);
@@ -55,7 +51,6 @@ app.get("/people", function(req, res){
 /////////////// Authentication ///////////////
 
 /*  PASSPORT SETUP  */
-const passport = require('passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
