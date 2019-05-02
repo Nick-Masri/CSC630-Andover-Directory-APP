@@ -87,17 +87,18 @@ export default class FirstPage extends Component {
   login = () => {
     if (this.state.isEmail) {
 
-      const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-      fetch('https://csc630-project-2.herokuapp.com/users', {
-        method: 'POST',
-        body: {
-          'email': this.state.email,
-          'password': this.state.password
-        },
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
+      var details = {
+           'email': this.state.email,
+           'password': this.state.password
+         };
+
+     const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+     fetch('http://172.16.251.133:3000/users', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+       },
+       body: formBody
       }).then((response) => response.json())
       .then((responseJson) => {
          this.props.navigation.navigate('LoginScreen');

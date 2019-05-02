@@ -88,16 +88,18 @@ export default class FirstPage extends Component {
   login = () => {
     if (this.state.isEmail) {
 
-      fetch('https://csc630-project-2.herokuapp.com/authenticate', {
+      var details = {
+        'email': this.state.email,
+        'password': this.state.password
+      };
+
+      const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+      fetch('http://172.16.251.133:3000/authenticate', {
         method: 'POST',
-        body: {
-          'email': this.state.email,
-          'password': this.state.password
-        },
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
+        body: formBody
       }).then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.page == "HomeScreen"){
