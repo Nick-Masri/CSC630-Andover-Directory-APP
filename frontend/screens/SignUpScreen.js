@@ -93,7 +93,11 @@ export default class FirstPage extends Component {
         body: {
           'email': this.state.email,
           'password': this.state.password
-        }
+        },
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
       }).then((response) => response.json())
       .then((responseJson) => {
          this.props.navigation.navigate('LoginScreen');
