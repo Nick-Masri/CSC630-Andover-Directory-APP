@@ -39,7 +39,7 @@ passport.use(new LocalStrategy({
     if(err) return done(err);
 
     if(!user) return done(null, false); // If nothing found
-    if (!bcrypt.compareSync(user.password, password)) return done(null, false); // If passport incorrect
+    if (!bcrypt.compareSync(password, user.password)) return done(null, false); // If passport incorrect
 
     return done(null, user); //Otherwise, authenticate
   });
