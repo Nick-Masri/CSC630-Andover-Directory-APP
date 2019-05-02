@@ -97,7 +97,7 @@ export default class FirstPage extends Component {
       };
 
       const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-      fetch('http://172.16.251.133:3000/authenticate', {
+      fetch('https://csc630-project-2.herokuapp.com/authenticate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -106,13 +106,12 @@ export default class FirstPage extends Component {
       }).then((response) => response.json())
       .then((responseJson) => {
         if(responseJson.page == "HomeScreen"){
-           this.props.navigation.navigate('HomeScreen');
+           this.props.navigation.navigate('Search');
         } else {
           this.setState({invalidReason: responseJson.error}, () => {
             this.invalidAuthentication();
           });
         }
-        console.log(responseJson);
       });
     } else {
       if (this.state.email + this.state.password == '') {

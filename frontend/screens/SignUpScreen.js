@@ -98,7 +98,7 @@ export default class FirstPage extends Component {
       };
 
       const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-      fetch('http://172.16.251.133:3000/users', {
+      fetch('https://csc630-project-2.herokuapp.com/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
