@@ -24,6 +24,8 @@ app.get("/people", function(req, res){
   knex.from("people")
     .select("*")
     .modify(function(queryBuilder){
+      if("search" in req.query) queryBuilder.where('search_body', 'like', '%' + req.query.search.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase() + '%');
+
       //Each field is a comma-separated list of values (i.e. clusters, dorms, etc.)
       if("dorms" in req.query) queryBuilder.whereIn('dorm', req.query.dorms.split(","));
 
@@ -34,8 +36,6 @@ app.get("/people", function(req, res){
       }));
 
       if("grades" in req.query) queryBuilder.whereIn('grade', req.query.grades.split(","));
-
-      if("search" in req.query) queryBuilder.whereRaw("position('" + req.query.search + "' in display_name) > 0 OR position('" + req.query.search + "' in email) > 0 OR position('" + req.query.search + "' in \"from\") > 0"); //TODO: improve on names, make lower case ALSO SQL injection vulnerable here
     })
     .paginate(30, req.query.page ? parseInt(req.query.page) : 1)
     .then(function(results){

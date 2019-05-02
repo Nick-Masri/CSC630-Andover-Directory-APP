@@ -26,6 +26,7 @@ module.exports = {
         table.integer('entered');
         table.string('cluster');
         table.string('grade');
+        table.string('search_body');
       })
       .then(function(){
         console.log("Successfully created 'people' table");
@@ -43,7 +44,11 @@ module.exports = {
       .then(function(result){
         //Only populate if the database is empty
         if(!result.length){
-          var rows = JSON.parse(fs.readFileSync("./app/scraper/directory.json"));
+          var rows = JSON.parse(fs.readFileSync("./backend/app/scraper/directory.json")).map(function(d){
+            d.search_body = (d.display_name + " " + d.email + " " + d.from).toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""); //Generate a search string for full text
+            return d;
+          });
+
           knex.batchInsert('people', rows)
             .then(function(){
               console.log("Successfully inserted rows");
