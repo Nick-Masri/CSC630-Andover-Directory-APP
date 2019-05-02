@@ -87,8 +87,8 @@ export default class FirstPage extends Component {
 
   login = () => {
     if (this.state.isEmail) {
-      
-      fetch('http://172.16.251.133:3000/authenticate', {
+
+      fetch('https://csc630-project-2.herokuapp.com/authenticate', {
         method: 'POST',
         body: {
           'email': this.state.email,

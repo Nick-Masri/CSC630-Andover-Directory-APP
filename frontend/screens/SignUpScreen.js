@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     fontSize: 60,
     color: '#FFF',
     marginBottom: 40,
-    // fontFamily: 'Roboto',
     marginTop: 20,
     textAlign: 'center'
   },
@@ -89,7 +88,7 @@ export default class FirstPage extends Component {
     if (this.state.isEmail) {
 
       const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-      fetch('http://172.16.251.133:3000/users', {
+      fetch('https://csc630-project-2.herokuapp.com/users', {
         method: 'POST',
         body: {
           'email': this.state.email,
