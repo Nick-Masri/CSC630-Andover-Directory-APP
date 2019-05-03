@@ -17,6 +17,7 @@ export default class FiltersScreen extends React.Component {
         dorm: '',
       }
     }
+    //sends the filters to the search page
     saveFilters = () => {
       this.props.navigation.push('Search', {
         dorm: this.state.dorm,

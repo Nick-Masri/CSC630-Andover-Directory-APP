@@ -72,6 +72,7 @@ export default class SearchScreen extends React.Component {
     }
     return filters
   }
+  //reset all parameters used for search
   clearSearch = () => {
     this.setState({
       search: '',
@@ -82,6 +83,7 @@ export default class SearchScreen extends React.Component {
       this.makeRemoteRequest();
     })
   }
+  //updates the search state
   updateSearch = (search) => {
     this.setState({ 
       search: search,
@@ -90,6 +92,7 @@ export default class SearchScreen extends React.Component {
       this.makeRemoteRequest();
     });
   };
+  //handles infinite scroll
   handleLoadMore = () => {
     if (!this.state.searchStatus){
       this.setState({
